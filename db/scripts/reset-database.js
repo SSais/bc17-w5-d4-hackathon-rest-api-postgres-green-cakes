@@ -11,44 +11,44 @@ async function resetDatabase() {
   try {
     // Drop existing tables if they exist
     await pool.query(`
-        DROP TABLE IF EXISTS artists CASCADE;
-        DROP TABLE IF EXISTS albums CASCADE;
+        DROP TABLE IF EXISTS magical_beasts CASCADE;
+        DROP TABLE IF EXISTS animal_care CASCADE;
     `);
 
     // Create the artists table
     await pool.query(`
-        CREATE TABLE artists (
+        CREATE TABLE magical_beasts (
             id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-            name VARCHAR(255) NOT NULL
+            name VARCHAR(255) NOT NULL,
+            description VARCHAR(255) NOT NULL
         );
     `);
 
-    // Create the albums table with a foreign key to the artists table
+    // Create the animal table - (future note =  ON delete CASCADE)
     await pool.query(`
-        CREATE TABLE albums (
+        CREATE TABLE animal_care (
             id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-            title VARCHAR(255) NOT NULL,
-            published_date DATE,
-            artist_id INT REFERENCES artists(id)
+            location VARCHAR(255) NOT NULL,
+            favorite  VARCHAR(255) NOT NULL,
+            dislikes  VARCHAR(255) NOT NULL,
+            beast_id INT REFERENCES magical_beasts(id)
         );
     `);
 
-    // Seed the artists table
+    // Seed the magical_beasts table
     await pool.query(`
-        INSERT INTO artists (name)
+        INSERT INTO magical_beasts (name, description)
         VALUES 
-            ('Dua Lipa'),
-            ('Jay-Z');
+            ('Niffler', 'small furry kleptomaniac'),
+            ('Phoenix', 'medium sized red bird that is reborn form ashes');
     `);
 
-    // Seed the albums table
+    // Seed the animal_care table
     await pool.query(`
-        INSERT INTO albums (title, published_date, artist_id)
+        INSERT INTO animal_care (location, favorite, dislikes, beast_id)
         VALUES 
-            ('Dua Lipa', '2017-06-02', 1),
-            ('Future Nostalgia', '2020-03-27', 1),
-            ('Reasonable Doubt', '1996-06-25', 2),
-            ('The Blueprint', '2001-09-11', 2);
+            ('Forbibben forest', 'Gold Ball', 'Hippogriffs', 1),
+            ('Poidsear Coast', 'Quaffle', 'Fwoopers', 2);
     `);
 
     console.log("Database reset successful");
