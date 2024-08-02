@@ -1,8 +1,6 @@
 // Import the required modules
 import express from "express";
 
-
-
 // Import your helper functions for your first resource here
 import {
   getMagicalBeasts,
@@ -15,13 +13,12 @@ import {
 
 // Import your helper functions for your second resource here
 import {
-  getCareInfo,
-  getCaraInfoById,
-  addNewInfo,
-  updateInfoById,
-  deleteInfoById,
+  getAnimalCare,
+  getAnimalCareById,
+  createAnimalCare,
+  updateAnimalCareById,
+  deleteAnimalCareById,
 } from "./animal_care.js";
-
 
 
 // Initialize the express app
@@ -30,8 +27,6 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json()); // express.json() middleware is used to parse incoming JSON requests
-
-
 
 
 // Resource One Route Handlers
@@ -75,34 +70,38 @@ app.delete("/magical_beasts/:id", async function (req, res) {
 
 
 
-// animal_care table
+// Animal care Route Handlers
 
-// Endpoint to retrieve all <resource_twos>
+// Endpoint to retrieve all animal care data
 app.get("/animal_care/", async function (req, res) {
-  const data = await getCareInfo();
-  res.status(200).json({status: "success", data: data });
-});
+  const requestedData = await getAnimalCare();
+  res.status(200).json({status: "success", data: requestedData });
+  });
   
-// Endpoint to retrieve a <resource_twos> by id
-app.get("/animal_care/:id", async function (req, res) {
-  const id = req.params.id;
-  const data = await getCaraInfoById(id);
-
-  res.status(200).json({ status: "success", data: data });
-});
+  // Endpoint to retrieve animal care by id
+  app.get("/animal_care/:id", async function (req, res) {
+    const id = req.params.id;
+    const requestedData = await getAnimalCareById(id);   
+    res.status(200).json({ status: "success", data: requestedData });
+  });
   
-// Endpoint to create a new <resource_twos>
-app.post("/animal_care/", async function (req, res) {
-});
+  // Endpoint to create new animal care data
+  app.post("/animal_care/", async function (req, res) {
+    const requestedData = await createAnimalCare(req.body);
+    res.status(201).json({ status: "success", data: requestedData });
+  });
   
-// Endpoint to update a specific <resource_twos> by id
-app.patch("/animal_care/:id", async function (req, res) {
-});
+  // Endpoint to update a specific <resource_twos> by id
+  app.patch("/animal_care/:id", async function (req, res) {
+    const id = req.params.id;
+    const data = req.body;
+    const requestedData = await updateAnimalCareById(id, data);
+    res.status(200).json({ status: "success", data: requestedData });
+  });
   
-// Endpoint to delete a specific <resource_twos> by id
-app.delete("/animal_care/:id", async function (req, res) {
-});
-
+  // Endpoint to delete a specific <resource_twos> by id
+  app.delete("/animal_care/:id", async function (req, res) {
+  });
 
 
 
